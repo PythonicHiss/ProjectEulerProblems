@@ -1,5 +1,6 @@
 
 def ListNat():
+    """Generates a list of numbers divisible by two given numbers and calculates their sum."""
     Nat = []
     print("Please select the limit:")
     n = int(input())
