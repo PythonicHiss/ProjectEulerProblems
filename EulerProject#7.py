@@ -10,7 +10,8 @@
 #For those that do not know, this sieving method uses the simple rule that once you find a smallest non-divisible number, it must be prime. So, therefore if you multiply this number by itself continuously all multiplications of it will be removed from the list.
 #Repeat this for all numbers, and you have rapidly and efficiently filtered a list down to just prime numbers.
 #Now, since 2 is the ONLY even number that is prime, this means that when solving for primes in a list, etc, we only need to look at odd numbers. This halves our effective search and hence search time. This applies regardless of method chosen.
-
+#Solution 3 makes use of the reduced search range of n**0.5 as explained in previous problem, and also use of odd only and value changing rather than removal.
+#Using the index to alter the True or False makes the search very fast, then list comprehension at the end. This is all done in accordance with the sieve methodology.
 
 #About my problem-solving mentality:
 #For me research is a valuable aspect to problem-solving. First I will sit down and make my own solutions, then attempt to refine them. But after that I do very deep research to understand not just coding approaches, but more importantly the problem itself.
@@ -37,22 +38,29 @@ def Solution1(n):
 #Solution1(1000000)
 
 def Solution2(n):
-    """So for this I wanted to attempt to refine the slow method, I tried to take the multiples of the numbers and edit a dictionary"""
-    #WIP (Rewriting trying a different method)
-    nums = []
-    for i in range(3, n + 1, 2):
-        nums.append(i)
-    #primes = [2]
-    for i in nums:
-        if i == nums[-1]:
-            return print(f'Primes are found {nums}')
-        else:
-            for e in list(range(i,len(nums),i+i)):
-                if e in nums and e!=i:
-                    nums[e] = 1
-    return print("No primes found")
-Solution2(1000)
+    #Still extremely slow run time, shortened search range and only did odd numbers, attempted a similar method to sieve by removal decreases efficiency greatly.
+    """So for this I wanted to attempt to refine the slow method, while still using a similar methodology. The range scanned is reduced and only odd numbers are tested for, though removing the item from the list slows process alot."""
+    nums = [i for i in range(3, n + 1, 2)]
+    for i in range(2,int(n**0.5)+1):
+        for e in range(2*i,n+1,i):
+            if e in nums:
+                nums.remove(e)
+    if len(nums)==0:
+        return print("No primes found.")
+    else:
+        nums.insert(0,2)
+        return print(f'Prime number 10001 is: {nums[10000]}')
 
-def Solution4():
-    """Did some reading around for this one, stumbled upon the sieve method, whereby we start at the smallest numbers and cross out any of their multiples, hence all that will be left are prime numbers"""
-#WIP
+#Solution2(1000000)
+
+def Solution3(n):
+    """Create list of all numbers as True, set 0,1 to False as not prime, use sieve method to set any values to False if index divisible by iteration term."""
+    primes = [True for i in range(n+1)]
+    primes[0],primes[1] = False,False
+    for x in range(2,int(n**0.5)+1):
+        for y in range(x*x, len(primes), x):
+            primes[y] = False
+    prime = [x for x in range(0,n+1) if primes[x]==True]
+    return print(prime[10000])
+
+#Solution3(1000000)
